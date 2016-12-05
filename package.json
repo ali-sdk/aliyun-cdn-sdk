@@ -1,0 +1,35 @@
+{
+  "name": "ali-cdn-sdk",
+  "version": "1.0.0",
+  "description": "阿里云 cdn sdk",
+  "main": "lib/sdk.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ikobe/aliyun-sdk"
+  },
+  "homepage": "https://github.com/ikobe/aliyun-sdk",
+  "author": "ikobe <ikobe621@gmail.com>",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint lib test"
+  },
+  "dependencies": {
+    "crypto": "^0.0.3",
+    "urllib": "^2.17.1"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "co": "^4.6.0",
+    "eslint": "2",
+    "eslint-config-egg": "^2.0.0",
+    "lint": "^1.1.2",
+    "mocha": "^3.2.0",
+    "moment": "^2.17.1"
+  }
+}
