@@ -101,6 +101,22 @@ describe('cdn.test.js', function() {
     });
   });
 
+  it('should throw error', done => {
+    co(function* () {
+      const res = yield sdk.DescribeDomainQpsData({
+        DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
+        StartTime: 'errorTime',
+        EndTime: 'errorTime',
+      });
+
+      expect(res.QpsDataInterval.DataModule).to.be.a.Array;
+      done();
+    }).catch(e => {
+      expect(e.message).equal('invalid arguments: Specified StartTime is malformed.');
+      done();
+    });
+  });
+
 });
 
 
