@@ -101,6 +101,20 @@ describe('cdn.test.js', function() {
     });
   });
 
+  it('DescribeCdnDomainLogs', done => {
+    co(function* () {
+      const res = yield sdk.DescribeCdnDomainLogs({
+        DomainName: 'a.alipayobjects.com',
+        LogDay: '2016-12-27',
+        PageSize: 1000,
+        PageNumber: 1,
+      });
+
+      expect(res.DomainLogModel.DomainLogDetails).to.be.a.Object;
+      done();
+    });
+  });
+
   it('should throw error', done => {
     co(function* () {
       const res = yield sdk.DescribeDomainQpsData({
