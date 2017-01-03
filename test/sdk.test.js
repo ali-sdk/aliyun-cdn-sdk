@@ -115,6 +115,17 @@ describe('cdn.test.js', function() {
     });
   });
 
+  it('DescribeCdnDomainDetail', done => {
+    co(function* () {
+      const res = yield sdk.DescribeCdnDomainDetail({
+        DomainName: 'a.alipayobjects.com',
+      });
+
+      expect(res.GetDomainDetailModel.DomainName).to.equal('a.alipayobjects.com');
+      done();
+    });
+  });
+
   it('should throw error', done => {
     co(function* () {
       const res = yield sdk.DescribeDomainQpsData({
