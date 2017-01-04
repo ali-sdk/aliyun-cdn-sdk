@@ -142,6 +142,18 @@ describe('cdn.test.js', function() {
     });
   });
 
+  it('should throw cdn error with status', done => {
+    co(function* () {
+      yield sdk.DescribeCdnDomainDetail({
+        DomainName: 'alipayobjects.alipayobjects.alipayobjects.alipayobjects.com',
+      });
+    }).catch(e => {
+      expect(e.name).equal('CdnError');
+      expect(e.status).equal(404);
+      done();
+    });
+  });
+
 });
 
 
