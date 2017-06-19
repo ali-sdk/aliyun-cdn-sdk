@@ -13,7 +13,8 @@
     "lib"
   ],
   "scripts": {
-    "test": "mocha",
+    "test": "egg-bin test",
+    "ci": "npm run lint && egg-bin cov",
     "lint": "eslint lib test"
   },
   "dependencies": {
@@ -24,12 +25,10 @@
     "lint"
   ],
   "devDependencies": {
-    "chai": "^3.5.0",
-    "co": "^4.6.0",
-    "eslint": "2",
-    "eslint-config-egg": "^2.0.0",
-    "lint": "^1.1.2",
-    "mocha": "^3.2.0",
-    "moment": "^2.17.1"
+    "egg-bin": "^3.6.0",
+    "eslint": "^4.0.0",
+    "eslint-config-egg": "^4.2.1",
+    "moment": "^2.18.1",
+    "pre-commit": "^1.2.2"
   }
 }
