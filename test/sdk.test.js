@@ -1,8 +1,7 @@
 'use strict';
 
-const co = require('co');
 const moment = require('moment');
-const expect = require('chai').expect;
+const assert = require('assert');
 
 const SDK = require('../');
 
@@ -14,7 +13,6 @@ const cdnConfig = {
 };
 
 describe('cdn.test.js', function() {
-  this.timeout(100000);
 
   const sdk = new SDK({
     accessKeyId: cdnConfig.accessKeyId,
@@ -23,139 +21,116 @@ describe('cdn.test.js', function() {
     apiVersion: cdnConfig.apiVersion,
   });
 
-  it('DescribeDomainHttpCodeData', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainHttpCodeData({
-        DomainName: 'a.alipayobjects.com',
-        StartTime: getUTCDate(25),  // 过去 20~25 分钟内的数据
-        EndTime: getUTCDate(20),
-      });
-      expect(res.HttpCodeData).to.be.a.Object;
-      expect(res.DataInterval).to.equal('300');
-      done();
+  it('DescribeDomainHttpCodeData', function* () {
+    const res = yield sdk.DescribeDomainHttpCodeData({
+      DomainName: 'a.alipayobjects.com',
+      StartTime: getUTCDate(25), // 过去 20~25 分钟内的数据
+      EndTime: getUTCDate(20),
     });
+    assert.ok(res.HttpCodeData);
+    assert.strictEqual(res.DataInterval, '300');
   });
 
-  it('DescribeDomainTopUrlVisit', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainTopUrlVisit({
-        DomainName: 'a.alipayobjects.com',
-        StartTime: getUTCDate(60 * 12),
-      });
-
-      expect(res.Url400List.UrlList).to.be.a.Array;
-      expect(res.Url500List.UrlList).to.be.a.Array;
-      done();
+  it('DescribeDomainTopUrlVisit', function* () {
+    const res = yield sdk.DescribeDomainTopUrlVisit({
+      DomainName: 'a.alipayobjects.com',
+      StartTime: getUTCDate(60 * 12),
     });
 
+    assert.ok(Array.isArray(res.Url400List.UrlList));
+    assert.ok(Array.isArray(res.Url500List.UrlList));
   });
 
-  it('DescribeDomainPvData', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainPvData({
-        DomainName: 'a.alipayobjects.com',
-        StartTime: getUTCDate(60 * 12),
-        EndTime: getUTCDate(60 * 11),
-      });
-
-      expect(res.PvDataInterval.UsageData).to.be.a.Object;
-      done();
+  it('DescribeDomainPvData', function* () {
+    const res = yield sdk.DescribeDomainPvData({
+      DomainName: 'a.alipayobjects.com',
+      StartTime: getUTCDate(60 * 12),
+      EndTime: getUTCDate(60 * 11),
     });
+
+    assert.ok(res.PvDataInterval.UsageData);
   });
 
-  it('DescribeDomainReqHitRateData', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainReqHitRateData({
-        DomainName: 'a.alipayobjects.com',
-        StartTime: getUTCDate(25),
-        EndTime: getUTCDate(20),
-      });
-      expect(res.ReqHitRateInterval.DataModule).to.be.a.Object;
-      done();
+  it('DescribeDomainReqHitRateData', function* () {
+    const res = yield sdk.DescribeDomainReqHitRateData({
+      DomainName: 'a.alipayobjects.com',
+      StartTime: getUTCDate(25),
+      EndTime: getUTCDate(20),
     });
+    assert.ok(res.ReqHitRateInterval.DataModule);
   });
 
-  it('DescribeDomainSrcFlowData', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainSrcFlowData({
-        DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
-        StartTime: getUTCDate(25),
-        EndTime: getUTCDate(20),
-      });
-
-      expect(res.SrcFlowDataPerInterval.DataModule).to.be.a.Array;
-      done();
+  it('DescribeDomainSrcFlowData', function* () {
+    const res = yield sdk.DescribeDomainSrcFlowData({
+      DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
+      StartTime: getUTCDate(25),
+      EndTime: getUTCDate(20),
     });
+
+    assert.ok(Array.isArray(res.SrcFlowDataPerInterval.DataModule));
   });
 
-  it('DescribeDomainQpsData', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainQpsData({
-        DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
-        StartTime: getUTCDate(25),
-        EndTime: getUTCDate(25),
-      });
-
-      expect(res.QpsDataInterval.DataModule).to.be.a.Array;
-      done();
+  it('DescribeDomainQpsData', function* () {
+    const res = yield sdk.DescribeDomainQpsData({
+      DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
+      StartTime: getUTCDate(25),
+      EndTime: getUTCDate(25),
     });
+
+    assert.ok(Array.isArray(res.QpsDataInterval.DataModule));
   });
 
-  it('DescribeCdnDomainLogs', done => {
-    co(function* () {
-      const res = yield sdk.DescribeCdnDomainLogs({
-        DomainName: 'a.alipayobjects.com',
-        LogDay: '2016-12-27',
-        PageSize: 1000,
-        PageNumber: 1,
-      });
-
-      expect(res.DomainLogModel.DomainLogDetails).to.be.a.Object;
-      done();
+  it('DescribeCdnDomainLogs', function* () {
+    const res = yield sdk.DescribeCdnDomainLogs({
+      DomainName: 'a.alipayobjects.com',
+      LogDay: '2016-12-27',
+      PageSize: 1000,
+      PageNumber: 1,
     });
+
+    assert.ok(res.DomainLogModel.DomainLogDetails);
   });
 
-  it('DescribeCdnDomainDetail', done => {
-    co(function* () {
-      const res = yield sdk.DescribeCdnDomainDetail({
-        DomainName: 'a.alipayobjects.com',
-      });
-
-      expect(res.GetDomainDetailModel.DomainName).to.equal('a.alipayobjects.com');
-      done();
+  it('DescribeCdnDomainDetail', function* () {
+    const res = yield sdk.DescribeCdnDomainDetail({
+      DomainName: 'a.alipayobjects.com',
     });
+
+    assert.strictEqual(res.GetDomainDetailModel.DomainName, 'a.alipayobjects.com');
   });
 
-  it('should throw error', done => {
-    co(function* () {
-      const res = yield sdk.DescribeDomainQpsData({
+  it('should throw error', function* () {
+    try {
+      yield sdk.DescribeDomainQpsData({
         DomainName: 'a.alipayobjects.com,as.alipayobjects.com,os.alipayobjects.com,zos.alipayobjects.com',
         StartTime: 'errorTime',
         EndTime: 'errorTime',
       });
-
-      expect(res.QpsDataInterval.DataModule).to.be.a.Array;
-      done();
-    }).catch(e => {
-      expect(e.message).equal('invalid arguments: Specified StartTime is malformed.');
-      done();
-    });
+    } catch (e) {
+      assert.strictEqual(e.message, 'invalid arguments: Specified StartTime is malformed.');
+    }
   });
 
-  it('should throw cdn error with status', done => {
-    co(function* () {
+  it('should throw cdn error with status', function* () {
+    try {
       yield sdk.DescribeCdnDomainDetail({
         DomainName: 'alipayobjects.alipayobjects.alipayobjects.alipayobjects.com',
       });
-    }).catch(e => {
-      expect(e.name).equal('CdnError');
-      expect(e.status).equal(404);
-      done();
-    });
+    } catch (e) {
+      assert.strictEqual(e.name, 'CdnError');
+      assert.strictEqual(e.status, 404);
+    }
   });
 
+  it('PushObjectCache', function* () {
+    const ObjectPath = 'http://design.koubei.com/docs/alipay';
+    const res = yield sdk.PushObjectCache({
+      ObjectPath,
+    });
+    assert.ok(res.PushTaskId);
+    assert.ok(res.RequestId);
+  });
 });
-
 
 /**
  * 得到 n 分钟前的 ISO string
